@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="commentsListApp">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
+	<title>Вероника Ростова - Менеджер по продажам</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />		
+	<!--[if lt IE 9]><script src="js/html5.js"></script><![endif]-->		
+
+	<!-- AngularJS from Google -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+
+<script>
+
+	// Prototype for Month
+	Date.prototype.getMonthName = function() {
+		var month = ['Января','Февраля','Марта','Апреля','Мая','Июня',
+		'Июля','Августа','Сентября','Октября','Ноября','Декабря'];
+		return month[this.getMonth()];
+	}
+
+	// MODEL
+	var comments = [
+	{name: 'Самуил', comment: 'Привет, Верунь! ниче себе ты крутая. фотка класс!!!!'},
+	{name: 'Лилия Семёновна', comment: 'Вероника, здравствуйте! Есть такой вопрос: Особый вид куниц жизненно стабилизирует кинетический момент, это и есть всемирно известный центр огранки алмазов и торговли бриллиантами?'},
+	{name: 'Лилия Семёновна', comment: 'Вероника, здравствуйте! Есть такой вопрос: Особый вид куниц жизненно стабилизирует кинетический момент?'},
+	];
+
+	// MODULE
+	var commentsListApp = angular.module("commentsListApp", []);
+
+	// CONTROLLER
+	commentsListApp.controller("commentsListCtrl", function($scope){
+
+		// Date
+		var today = new Date();
+		$scope.day = today.getDay() + ' ' + today.getMonthName() + ' ' + today.getFullYear();
+
+		// Comments from MODEL
+		$scope.data = comments;
+
+
+		// Submit Method on Press
+		$scope.submitComment = function($event) {
+
+			if($scope.comment != '') {
+
+				$scope.data.push({
+					name: 'Аноним',
+					comment: $scope.comment,
+					date: $scope.today
+				});
+				$scope.comment = '';
+
+			} else {
+				return;
+			}
+		}
+
+		// Submit Method on KeyDown
+		$scope.submitByKey = function(keycode){
+			if(keycode.charCode == 10){
+				$scope.submitComment();
+			}
+		}
+
+	});
+
+</script>
+</head>
+<body class="loaded" ng-controller="commentsListCtrl">
+							
+<!-- BEGIN BODY -->
+
+<div class="main-wrapper">
+
+<!-- BEGIN CONTENT -->
+
+	<main class="content">
+	
+		<section class="box-comments">
+			<div class="wrapper">
+				<div class="user-info clearfix">
+					<div class="user-info__img" style="background-image: url(img/user-image.png);"></div>
+					<h3 class="user-info__name">Вероника Ростова</h3>
+					<span class="user-info__post">Менеджер по продажам</span>
+					<div class="user-info__descr">
+						Подберу для вас самые лучшие предложения. Мои услуги абсолютно бесплатны
+					</div>
+				</div>
+
+				<div class="services-table">
+
+					<div class="services-table__tblock">
+						<span class="services-table__title">Услуг</span>
+					</div>
+
+					<div class="box-services">
+						<table class="services">
+							<tr>
+								<td class="services__item">
+									<span class="service__text">Ручное бронирование</span>
+									<div class="service__line" style="width: 100%; background-color: #b1e19b"></div>
+								</td>
+								<td class="services__num">11</td>
+							</tr>
+							<tr>
+								<td class="services__item">
+									<span class="service__text">Пакетные туры</span>
+									<div class="service__line" style="width: 24.54%; background-color: #ace2f8"></div>
+								</td>
+								<td class="services__num">3</td>
+							</tr>
+							<tr>
+								<td class="services__item">
+									<span class="service__text">Отели</span>
+									<div class="service__line" style="width: 16.36%; background-color: #ace2f8"></div>
+								</td>
+								<td class="services__num">1</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="services-table__count clearfix">
+						<div class="services-table__all">Всего</div>
+						<div class="services-table__name">15</div>
+					</div>
+				</div>
+
+				<div class="info-line clearfix">
+					<h3 class="info-line__title">Последние отзывы</h3>
+					<a class="info-line__link" href="#">Все отзывы</a>
+
+					<div class="social">
+						<a href="#" class="social__btn social__btn--heart">131</a>
+						<a href="#" class="social__btn social__btn--comm">141</a>
+					</div>
+				</div>
+
+				<div class="user-comments">
+
+					<!-- AngularJS Repeat -->
+
+					<div ng-repeat="comm in data" class="user-comment">
+						<h4 class="user-comment__name">{{comm.name}}</h4>
+						<span class="user-comment__date">{{comm.date || day}}</span>
+						<div class="user-comment__text">{{comm.comment}}</div>
+					</div>
+
+				</div>
+			</div>
+			</section>
+
+			<section class="add-comment">
+				<div class="wrapper">
+					<form class="comment-form">
+						<textarea ng-keypress="submitByKey($event)" ng-model="comment" class="comment-form__input" name="comment-text" placeholder=""></textarea>
+						<input ng-click="submitComment($event)" class="comment-form__submit" type="submit" value="Написать консультанту">
+					</form>
+				</div>
+			</section>
+				
+	</main>
+
+</div>		
+
+<div class="icon-load"></div>		
+
+<!-- BODY EOF   -->
+	
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>		
+	<script type="text/javascript" src="js/jquery-migrate.min.js" ></script>
+	<script type="text/javascript" src="js/custom.js" ></script>
+</body>
+</html>
